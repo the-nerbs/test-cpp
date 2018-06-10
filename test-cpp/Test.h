@@ -38,8 +38,12 @@ namespace test
         template <typename TRet>
         struct is_valid_test_args<TRet()> : std::true_type {};
 
+
+        template <typename TFn>
+        struct is_valid_rowtest_args : std::false_type {};
+
         template <typename TRet, typename TArg>
-        struct is_valid_test_args<TRet(const TArg&)> : std::true_type {};
+        struct is_valid_rowtest_args<TRet(const TArg&)> : std::true_type {};
 
 
         // return checking
@@ -60,44 +64,48 @@ namespace test
 #define PPSTRING2(x)        # x
 #define PPSTRING(x)         PPSTRING2(x)
 
-#define STATIC_ASSERT_VALID_TEST_FN(fn)                                                 \
-    static_assert(                                                                      \
-        ::test::details::is_valid_test_callconv<decltype(fn)>::value,                   \
-        PPSTRING(fn) ": test functions must be " PPSTRING(TEST_CALLCONV));              \
-    static_assert(                                                                      \
-        ::test::details::is_valid_test_args<decltype(fn)>::value,                       \
-        PPSTRING(fn) ": test functions must take 0 arguments, or 1 const& argument.");  \
-    static_assert(                                                                      \
-        ::test::details::is_valid_test_return<decltype(fn)>::value,                     \
+#define STATIC_ASSERT_VALID_TEST_FN(fn)                                         \
+    static_assert(                                                              \
+        ::test::details::is_valid_test_callconv<decltype(fn)>::value,           \
+        PPSTRING(fn) ": test functions must be " PPSTRING(TEST_CALLCONV));      \
+    static_assert(                                                              \
+        ::test::details::is_valid_test_return<decltype(fn)>::value,             \
         PPSTRING(fn) ": test functions must have a void return type.")
 
-#define TEST(fn)                                            \
-    STATIC_ASSERT_VALID_TEST_FN(fn);                        \
-    extern "C" __declspec(dllexport)                        \
-    const ::test::details::TestFunc* GTI_FN_NAME(fn)()      \
-    {                                                       \
-        static const ::test::details::TestFunc info{        \
-            (::test::details::TestFn)fn,                    \
-            PPSTRING(fn),                                   \
-            __FILE__,                                       \
-            nullptr,                                        \
-            1, 0                                            \
-        };                                                  \
-        return &info;                                       \
+
+#define TEST(fn)                                                                \
+    STATIC_ASSERT_VALID_TEST_FN(fn);                                            \
+    static_assert(                                                              \
+        ::test::details::is_valid_test_args<decltype(fn)>::value,               \
+        PPSTRING(fn) ": test functions must take no arguments.");               \
+    extern "C" __declspec(dllexport)                                            \
+    const ::test::details::TestFunc* GTI_FN_NAME(fn)()                          \
+    {                                                                           \
+        static const ::test::details::TestFunc info{                            \
+            (::test::details::TestFn)fn,                                        \
+            PPSTRING(fn),                                                       \
+            __FILE__,                                                           \
+            nullptr,                                                            \
+            1, 0                                                                \
+        };                                                                      \
+        return &info;                                                           \
     }
 
 
-#define ROW_TEST(fn, args)                              \
-    STATIC_ASSERT_VALID_TEST_FN(fn);                    \
-    extern "C" __declspec(dllexport)                    \
-    const ::test::details::TestFunc* GTI_FN_NAME(fn)()  \
-    {                                                   \
-        static const ::test::details::TestFunc info{    \
-            (::test::details::TestFn)fn,                \
-            PPSTRING(fn),                               \
-            __FILE__,                                   \
-            (void*)&args,                               \
-            COUNT(args), ARGSIZE(args)                  \
-        };                                              \
-        return &info;                                   \
+#define ROW_TEST(fn, args)                                                      \
+    STATIC_ASSERT_VALID_TEST_FN(fn);                                            \
+    static_assert(                                                              \
+        ::test::details::is_valid_rowtest_args<decltype(fn)>::value,            \
+        PPSTRING(fn) ": row test functions must take 1 const& argument.");      \
+    extern "C" __declspec(dllexport)                                            \
+    const ::test::details::TestFunc* GTI_FN_NAME(fn)()                          \
+    {                                                                           \
+        static const ::test::details::TestFunc info{                            \
+            (::test::details::TestFn)fn,                                        \
+            PPSTRING(fn),                                                       \
+            __FILE__,                                                           \
+            (void*)&args,                                                       \
+            COUNT(args), ARGSIZE(args)                                          \
+        };                                                                      \
+        return &info;                                                           \
     }
