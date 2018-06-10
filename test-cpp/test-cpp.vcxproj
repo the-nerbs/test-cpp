@@ -121,14 +121,18 @@
   <ItemGroup>
     <ClInclude Include="Assert.h" />
     <ClInclude Include="AssertExceptions.h" />
+    <ClInclude Include="ConsoleReporter.h" />
     <ClInclude Include="Stringify.h" />
     <ClInclude Include="Test.h" />
+    <ClInclude Include="TestInfo.h" />
+    <ClInclude Include="TestReporter.h" />
     <ClInclude Include="TestResult.h" />
     <ClInclude Include="TestRunner.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Assert.cpp" />
     <ClCompile Include="AssertExceptions.cpp" />
+    <ClCompile Include="ConsoleReporter.cpp" />
     <ClCompile Include="TestRunner.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

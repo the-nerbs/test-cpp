@@ -33,7 +33,7 @@ namespace test
 }
 
 template<>
-std::string Stringify<test::TestOutcome>::convert(const test::TestOutcome& v)
+inline std::string Stringify<test::TestOutcome>::convert(const test::TestOutcome& v)
 {
     using namespace test;
     switch (v)

@@ -4,16 +4,11 @@
 #include "Stringify.h"
 #include "AssertExceptions.h"
 
-#include <map>
 #include <vector>
-#include <iostream>
-#include <iomanip>
-#include <memory>
-#include <algorithm>
 #include <cstdint>
+#include <cstdio>
 
 #include <io.h>
-#include <cstdio>
 
 #include <Windows.h>
 #undef min
@@ -179,20 +174,25 @@ namespace test
     }
 
 
-    static void runTest(std::vector<TestResult>& allResults, const TestFunc& testInfo)
+    static void runTest(TestReporter& reporter, const TestFunc& testInfo)
     {
-        std::cout << std::setw(20) << std::left << testInfo.pszName << std::flush;
-        int outcome = static_cast<int>(TestOutcome::Passed);
-        int startIdx = static_cast<int>(allResults.size());
+        TestInfo info{
+            testInfo.pszName,
+            testInfo.pszFile,
+            testInfo.count,
+            0
+        };
 
         if (testInfo.count == 1 && testInfo.argSize == 0)
         {
+            info.rowNumber = 1;
+            reporter.TestStarting(info);
+
             TestResult result = runTest(testInfo.pfnTest, nullptr);
             result.pszTestName = testInfo.pszName;
-            result.rowNumber = 0;
-            allResults.push_back(result);
+            result.rowNumber = info.rowNumber;
 
-            outcome = std::min(outcome, (int)result.outcome);
+            reporter.TestFinished(info, result);
         }
         else if (testInfo.argSize > 0)
         {
@@ -202,90 +202,34 @@ namespace test
                 n < testInfo.count;
                 n++, argsAddr += testInfo.argSize)
             {
+                info.rowNumber = 1+n;
+                reporter.TestStarting(info);
+
                 TestResult result = runTest(testInfo.pfnTest, (void*)argsAddr);
                 result.pszTestName = testInfo.pszName;
-                result.rowNumber = n;
-                allResults.push_back(result);
+                result.rowNumber = info.rowNumber;
 
-                outcome = std::min(outcome, static_cast<int>(result.outcome));
-            }
-        }
-
-        std::cout << std::setw(14) << std::left << stringify((TestOutcome)outcome);
-        if (testInfo.count > 1)
-        {
-            std::cout << ' ' << testInfo.count << " Rows";
-        }
-        std::cout << std::endl;
-
-        if (outcome != (int)TestOutcome::Passed)
-        {
-            if (testInfo.count > 1)
-            {
-                for (int n = 0; n < testInfo.count; n++)
-                {
-                    const TestResult& result = allResults[startIdx + n];
-                    if (result.outcome != TestOutcome::Passed)
-                    {
-                        std::cout
-                            << "  Row "
-                            << std::left << std::setw(14) << n
-                            << stringify(result.outcome) << "\n"
-                            << "    " << result.message
-                            << std::endl;
-                    }
-                }
-            }
-            else
-            {
-                const TestResult& result = allResults[startIdx];
-                std::cout << "    " << result.message << std::endl;
+                reporter.TestFinished(info, result);
             }
         }
     }
 
-    void runAllTests()
+    void runAllTests(TestReporter& reporter)
     {
         // discover tests
-        std::vector<const TestFunc*> testTokenRows = discoverTests();
+        std::vector<const TestFunc*> tests = discoverTests();
 
         // run tests
-        std::vector<TestResult> results;
-        for (const auto* pTestInfo : testTokenRows)
+        reporter.RunStarting();
+
+        for (const auto* pTestInfo : tests)
         {
             if (pTestInfo != nullptr)
             {
-                runTest(results, *pTestInfo);
+                runTest(reporter, *pTestInfo);
             }
         }
 
-        // print summary
-        std::map<TestOutcome, size_t> outcomes;
-
-        for (const auto& res : results)
-        {
-            outcomes[res.outcome]++;
-        }
-
-        std::cout << "\n\n";
-        std::cout << "Test results\n";
-        std::cout << "------------------\n";
-        for (const auto& kvp : outcomes)
-        {
-            std::cout << std::setw(14) << std::left << stringify(kvp.first);
-            std::cout << kvp.second << '\n';
-        }
-        std::cout << '\n';
-        std::cout << std::setw(14) << "Total" << results.size();
-        std::cout << "\n\n";
-
-        if (outcomes[TestOutcome::Passed] == results.size())
-        {
-            std::cout << "Test run passed.\n\n";
-        }
-        else
-        {
-            std::cout << "Test run failed.\n\n";
-        }
+        reporter.RunFinished();
     }
 }

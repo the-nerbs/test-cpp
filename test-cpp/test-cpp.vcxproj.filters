@@ -21,9 +21,6 @@
     <ClInclude Include="AssertExceptions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TestResult.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Assert.h">
       <Filter>Header Files\Public</Filter>
     </ClInclude>
@@ -36,6 +33,18 @@
     <ClInclude Include="TestRunner.h">
       <Filter>Header Files\Public</Filter>
     </ClInclude>
+    <ClInclude Include="TestReporter.h">
+      <Filter>Header Files\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="TestInfo.h">
+      <Filter>Header Files\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsoleReporter.h">
+      <Filter>Header Files\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="TestResult.h">
+      <Filter>Header Files\Public</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Assert.cpp">
@@ -45,6 +54,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TestRunner.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ConsoleReporter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
