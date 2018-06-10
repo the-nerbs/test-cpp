@@ -211,7 +211,12 @@ namespace test
             }
         }
 
-        std::cout << stringify((TestOutcome)outcome) << std::endl;
+        std::cout << std::setw(14) << std::left << stringify((TestOutcome)outcome);
+        if (testInfo.count > 1)
+        {
+            std::cout << ' ' << testInfo.count << " Rows";
+        }
+        std::cout << std::endl;
 
         if (outcome != (int)TestOutcome::Passed)
         {

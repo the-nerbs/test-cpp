@@ -29,8 +29,8 @@ namespace test
             fail(
                 message,
                 __func__,
-                Stringify<double>::convert(expected),
-                Stringify<double>::convert(actual)
+                stringify(expected),
+                stringify(actual)
             );
         }
     }
@@ -43,8 +43,8 @@ namespace test
             fail(
                 message,
                 __func__,
-                Stringify<double>::convert(expected),
-                Stringify<double>::convert(actual)
+                stringify(expected),
+                stringify(actual)
             );
         }
     }

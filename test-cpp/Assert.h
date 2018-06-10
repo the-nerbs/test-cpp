@@ -18,8 +18,8 @@ namespace test
             {
                 fail(message,
                     __func__,
-                    Stringify<T>::convert(expected),
-                    Stringify<U>::convert(actual)
+                    stringify(expected),
+                    stringify(actual)
                 );
             }
         }
@@ -34,8 +34,8 @@ namespace test
             {
                 fail(message,
                     __func__,
-                    Stringify<T>::convert(expected),
-                    Stringify<U>::convert(actual)
+                    stringify(expected),
+                    stringify(actual)
                 );
             }
         }
