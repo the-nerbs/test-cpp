@@ -6,9 +6,9 @@ feature-rich. It allows for defining basic unit tests and data-driven row tests.
 
 ## Examples
 The Samples directory contains a series of examples for how to use this framework.
-- [SimpleTest.cpp](Samples\SimpleTest.cpp) demonstrates how to define a basic unit test.
-- [RowTest.cpp](Samples\RowTest.cpp) demonstrates how to define a row test.
-- [Driver.cpp](Samples\Driver.cpp) demonstrates how to run the tests.
+- [SimpleTest.cpp](Samples/SimpleTest.cpp) demonstrates how to define a basic unit test.
+- [RowTest.cpp](Samples/RowTest.cpp) demonstrates how to define a row test.
+- [Driver.cpp](Samples/Driver.cpp) demonstrates how to run the tests.
 
 
 ## Building
