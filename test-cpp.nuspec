@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>test-cpp</id>
+    <version>1.0.0</version>
+    <authors>the-nerbs</authors>
+    <owners>the-nerbs</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A small test suite for C++.</description>
+    <copyright>Copyright 2018</copyright>
+    <tags>C++ native unit-test</tags>
+  </metadata>
+  
+  <files>
+    <file src=".bin\**\test-cpp.lib" target="build\lib" />
+    <file src=".bin\**\test-cpp.pdb" target="build\lib" />
+    <file src="test-cpp\Test.h" target="build\include\test-cpp" />
+    <file src="test-cpp\TestRunner.h" target="build\include\test-cpp" />
+    <file src="test-cpp\Stringify.h" target="build\include\test-cpp" />
+    <file src="test-cpp\Assert.h" target="build\include\test-cpp" />
+    <file src="tools\test-cpp.props" target="build" />
+  </files>
+</package>
