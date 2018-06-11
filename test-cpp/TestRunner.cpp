@@ -186,13 +186,13 @@ namespace test
         if (testInfo.count == 1 && testInfo.argSize == 0)
         {
             info.rowNumber = 1;
-            reporter.TestStarting(info);
+            reporter.testStarting(info);
 
             TestResult result = runTest(testInfo.pfnTest, nullptr);
             result.pszTestName = testInfo.pszName;
             result.rowNumber = info.rowNumber;
 
-            reporter.TestFinished(info, result);
+            reporter.testFinished(info, result);
         }
         else if (testInfo.argSize > 0)
         {
@@ -203,13 +203,13 @@ namespace test
                 n++, argsAddr += testInfo.argSize)
             {
                 info.rowNumber = 1+n;
-                reporter.TestStarting(info);
+                reporter.testStarting(info);
 
                 TestResult result = runTest(testInfo.pfnTest, (void*)argsAddr);
                 result.pszTestName = testInfo.pszName;
                 result.rowNumber = info.rowNumber;
 
-                reporter.TestFinished(info, result);
+                reporter.testFinished(info, result);
             }
         }
     }
@@ -220,7 +220,7 @@ namespace test
         std::vector<const TestFunc*> tests = discoverTests();
 
         // run tests
-        reporter.RunStarting();
+        reporter.runStarting();
 
         for (const auto* pTestInfo : tests)
         {
@@ -230,6 +230,6 @@ namespace test
             }
         }
 
-        reporter.RunFinished();
+        reporter.runFinished();
     }
 }

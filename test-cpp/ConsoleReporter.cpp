@@ -7,12 +7,12 @@
 
 namespace test
 {
-    void ConsoleReporter::RunStarting()
+    void ConsoleReporter::runStarting()
     {
         _results.clear();
     }
 
-    void ConsoleReporter::RunFinished()
+    void ConsoleReporter::runFinished()
     {
         // print summary
         std::map<TestOutcome, size_t> outcomes;
@@ -44,7 +44,7 @@ namespace test
         }
     }
 
-    void ConsoleReporter::TestStarting(const TestInfo& testInfo)
+    void ConsoleReporter::testStarting(const TestInfo& testInfo)
     {
         if (testInfo.rowNumber == 1)
         {
@@ -53,7 +53,7 @@ namespace test
         }
     }
 
-    void ConsoleReporter::TestFinished(const TestInfo& testInfo, const TestResult& result)
+    void ConsoleReporter::testFinished(const TestInfo& testInfo, const TestResult& result)
     {
         _outcome = (TestOutcome)std::min((int)_outcome, static_cast<int>(result.outcome));
         _results.push_back(result);

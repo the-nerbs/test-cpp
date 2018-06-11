@@ -9,11 +9,11 @@ namespace test
         public TestReporter
     {
     public:
-        void RunStarting() override;
-        void RunFinished() override;
+        void runStarting() override;
+        void runFinished() override;
 
-        void TestStarting(const TestInfo& testInfo) override;
-        void TestFinished(const TestInfo& testInfo, const TestResult& result) override;
+        void testStarting(const TestInfo& testInfo) override;
+        void testFinished(const TestInfo& testInfo, const TestResult& result) override;
 
 
     private:

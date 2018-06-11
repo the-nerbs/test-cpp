@@ -9,10 +9,10 @@ namespace test
     public:
         virtual ~TestReporter() = default;
 
-        virtual void RunStarting() = 0;
-        virtual void RunFinished() = 0;
+        virtual void runStarting() = 0;
+        virtual void runFinished() = 0;
 
-        virtual void TestStarting(const TestInfo& testInfo) = 0;
-        virtual void TestFinished(const TestInfo& testInfo, const TestResult& result) = 0;
+        virtual void testStarting(const TestInfo& testInfo) = 0;
+        virtual void testFinished(const TestInfo& testInfo, const TestResult& result) = 0;
     };
 }
