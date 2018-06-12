@@ -1,6 +1,8 @@
 #pragma once
 #include "AssertExceptions.h"
 
+#include <utility>
+
 namespace test
 {
     AssertException::AssertException(std::string message) :
