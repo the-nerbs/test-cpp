@@ -19,6 +19,13 @@ namespace test
             int argSize;
         };
 
+        struct TestTag
+        {
+            const char* pszTestName;
+            const char* pszTestFile;
+            const char* pszTag;
+        };
+
         // calling convention checking
         // must be a caller-cleanup, non-member convention (only __cdecl for MSVC)
         // caller-cleanup needed since we always pass 1 arg, even to 0-arg tests.
@@ -63,6 +70,24 @@ namespace test
 #define ARGSIZE(arr)        (sizeof(arr[0]))
 #define PPSTRING2(x)        # x
 #define PPSTRING(x)         PPSTRING2(x)
+#define CAT_TOK2(x,y)       x ## y
+#define CAT_TOK(x,y)        CAT_TOK2(x, y)
+#define TAG_FN_NAME(fn)     CAT_TOK(getTestTag_ ## fn, __COUNTER__)
+
+
+#define TAG_TEST(fn, tag)                                                       \
+    extern "C" __declspec(dllexport)                                            \
+    const ::test::details::TestTag* TAG_FN_NAME(fn)()                           \
+    {                                                                           \
+        static const ::test::details::TestTag info{                             \
+            PPSTRING(fn),                                                       \
+            __FILE__,                                                           \
+            tag                                                                 \
+        };                                                                      \
+                                                                                \
+        return &info;                                                           \
+    }
+
 
 #define STATIC_ASSERT_VALID_TEST_FN(fn)                                         \
     static_assert(                                                              \

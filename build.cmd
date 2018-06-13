@@ -49,3 +49,4 @@ if exist "%LOCAL_NUGET_REPO%" (
 )
 
 :end
+echo.

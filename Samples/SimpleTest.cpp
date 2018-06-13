@@ -6,3 +6,5 @@ void sampleTest()
     // snip
 }
 TEST(sampleTest);
+TAG_TEST(sampleTest, "samples");
+TAG_TEST(sampleTest, "basic test");

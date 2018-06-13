@@ -17,3 +17,5 @@ void sampleRowTest(const TestRow& row)
     test::Assert::areNotEqual(row.y, row.z, "expected y to not be equal to z");
 }
 ROW_TEST(sampleRowTest, sampleRowTestRows);
+TAG_TEST(sampleRowTest, "samples");
+TAG_TEST(sampleRowTest, "row test");

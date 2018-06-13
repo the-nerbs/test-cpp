@@ -18,6 +18,12 @@ using namespace test::details;
 
 namespace test
 {
+    struct FullTestInfo
+    {
+        const TestFunc* testFnInfo;
+        std::vector<std::string> tags;
+    };
+
     static std::string getTempFileName()
     {
         GUID uid{};
@@ -100,7 +106,7 @@ namespace test
         return content;
     }
 
-    static std::vector<const TestFunc*> discoverTests()
+    static std::vector<FullTestInfo> discoverTests()
     {
         const uint8_t* pBase = (const uint8_t*)GetModuleHandle(NULL);
         auto pDosHeader = (const IMAGE_DOS_HEADER*)pBase;
@@ -113,22 +119,53 @@ namespace test
         const DWORD* pNames = (const DWORD*)(pBase + pExports->AddressOfNames);
 
         std::vector<const TestFunc*> infos;
+        std::vector<const TestTag*> tags;
 
         for (DWORD i = 0; i < pExports->NumberOfFunctions; i++)
         {
             const void* pfn = (const void*)(pBase + pFuncs[i]);
             const char* pszName = (const char*)(pBase + pNames[i]);
 
-            static constexpr const char NamePrefix[] = "getTestInfo_";
-            if (strncmp(pszName, NamePrefix, _countof(NamePrefix) - 1) == 0)
+            static constexpr const char TestInfoNamePrefix[] = "getTestInfo_";
+            static constexpr const char TagInfoNamePrefix[] = "getTestTag_";
+            if (strncmp(pszName, TestInfoNamePrefix, _countof(TestInfoNamePrefix) - 1) == 0)
             {
                 using GetInfoFn = const TestFunc* (*)();
                 auto pfnGetInfo = (GetInfoFn)pfn;
                 infos.push_back(pfnGetInfo());
             }
+            else if (strncmp(pszName, TagInfoNamePrefix, _countof(TagInfoNamePrefix) - 1) == 0)
+            {
+                using GetTagFn = const TestTag* (*)();
+                auto pfnGetTag = (GetTagFn)pfn;
+                tags.push_back(pfnGetTag());
+            }
         }
 
-        return infos;
+        // link up all the infos
+        std::vector<FullTestInfo> fullInfos;
+        for (const TestFunc* pTestFn : infos)
+        {
+            if (pTestFn != nullptr)
+            {
+                FullTestInfo fti;
+                fti.testFnInfo = pTestFn;
+
+                // tags
+                for (const TestTag* pTag : tags)
+                {
+                    if (strcmp(pTestFn->pszName, pTag->pszTestName) == 0
+                        && strcmp(pTestFn->pszFile, pTag->pszTestFile) == 0)
+                    {
+                        fti.tags.emplace_back(pTag->pszTag);
+                    }
+                }
+
+                fullInfos.push_back(std::move(fti));
+            }
+        }
+
+        return fullInfos;
     }
 
     static TestResult runTest(TestFn test, void* context)
@@ -217,17 +254,14 @@ namespace test
     void runAllTests(TestReporter& reporter)
     {
         // discover tests
-        std::vector<const TestFunc*> tests = discoverTests();
+        std::vector<FullTestInfo> tests = discoverTests();
 
         // run tests
         reporter.runStarting();
 
-        for (const auto* pTestInfo : tests)
+        for (const auto& testInfo : tests)
         {
-            if (pTestInfo != nullptr)
-            {
-                runTest(reporter, *pTestInfo);
-            }
+            runTest(reporter, *testInfo.testFnInfo);
         }
 
         reporter.runFinished();
