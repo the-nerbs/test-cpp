@@ -1,5 +1,5 @@
-#include "test-cpp\TestRunner.h"
-#include "test-cpp\ConsoleReporter.h"
+#include "test-cpp\include\TestRunner.h"
+#include "test-cpp\include\ConsoleReporter.h"
 #include <cstdlib>
 
 int main()

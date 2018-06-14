@@ -119,21 +119,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Assert.h" />
-    <ClInclude Include="AssertExceptions.h" />
-    <ClInclude Include="ConsoleReporter.h" />
-    <ClInclude Include="Stringify.h" />
-    <ClInclude Include="Test.h" />
-    <ClInclude Include="TestInfo.h" />
-    <ClInclude Include="TestReporter.h" />
-    <ClInclude Include="TestResult.h" />
-    <ClInclude Include="TestRunner.h" />
+    <ClInclude Include="include\Assert.h" />
+    <ClInclude Include="src\AssertExceptions.h" />
+    <ClInclude Include="include\ConsoleReporter.h" />
+    <ClInclude Include="include\Stringify.h" />
+    <ClInclude Include="include\Test.h" />
+    <ClInclude Include="include\TestInfo.h" />
+    <ClInclude Include="include\TestReporter.h" />
+    <ClInclude Include="include\TestResult.h" />
+    <ClInclude Include="include\TestRunner.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Assert.cpp" />
-    <ClCompile Include="AssertExceptions.cpp" />
-    <ClCompile Include="ConsoleReporter.cpp" />
-    <ClCompile Include="TestRunner.cpp" />
+    <ClCompile Include="src\Assert.cpp" />
+    <ClCompile Include="src\AssertExceptions.cpp" />
+    <ClCompile Include="src\ConsoleReporter.cpp" />
+    <ClCompile Include="src\TestRunner.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -14,14 +14,7 @@
   <files>
     <file src=".bin\**\test-cpp.lib" target="build\native\lib" />
     <file src=".bin\**\test-cpp.pdb" target="build\native\lib" />
-    <file src="test-cpp\Assert.h" target="build\native\include\test-cpp" />
-    <file src="test-cpp\ConsoleReporter.h" target="build\native\include\test-cpp" />
-    <file src="test-cpp\Stringify.h" target="build\native\include\test-cpp" />
-    <file src="test-cpp\Test.h" target="build\native\include\test-cpp" />
-    <file src="test-cpp\TestInfo.h" target="build\native\include\test-cpp" />
-    <file src="test-cpp\TestReporter.h" target="build\native\include\test-cpp" />
-    <file src="test-cpp\TestResult.h" target="build\native\include\test-cpp" />
-    <file src="test-cpp\TestRunner.h" target="build\native\include\test-cpp" />
+    <file src="test-cpp\include\*" target="build\native\include\test-cpp" />
     <file src="tools\test-cpp.props" target="build\native" />
   </files>
 </package>

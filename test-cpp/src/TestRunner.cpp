@@ -1,7 +1,7 @@
-#include "TestRunner.h"
-#include "TestResult.h"
-#include "Test.h"
-#include "Stringify.h"
+#include "../include/TestRunner.h"
+#include "../include/TestResult.h"
+#include "../include/Test.h"
+#include "../include/Stringify.h"
 #include "AssertExceptions.h"
 
 #include <vector>
