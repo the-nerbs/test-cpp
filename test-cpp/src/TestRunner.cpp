@@ -1,7 +1,7 @@
-#include "../include/TestRunner.h"
-#include "../include/TestResult.h"
-#include "../include/Test.h"
-#include "../include/Stringify.h"
+#include "TestRunner.h"
+#include "TestResult.h"
+#include "Test.h"
+#include "Stringify.h"
 #include "AssertExceptions.h"
 
 #include <vector>
@@ -42,6 +42,8 @@ namespace test
 
         while (pBytes < end)
         {
+            // 28199:   MSVC\prefast - possibly uninitialized memory.
+#pragma warning(suppress : 28199)
             fname[idx++] = HexChars[*pBytes >> 4];
             fname[idx++] = HexChars[*pBytes & 0x0F];
             pBytes++;
@@ -60,8 +62,9 @@ namespace test
     {
         int orig = _dup(_fileno(f));
 
-        // suppress deprecated (unsafe) CRT function.
-#pragma warning(suppress: 4996)
+        // 4996:    MSVC suppress deprecated (unsafe) CRT function.
+        // 6031:    MSVC\prefast - return value ignored.
+#pragma warning(suppress: 4996 6031)
         freopen(file.c_str(), "w", f);
 
         return orig;
@@ -71,6 +74,9 @@ namespace test
     {
         // flush and restore the std stream
         fflush(f);
+
+        // 6031:    MSVC\prefast - return value ignored.
+#pragma warning(suppress : 6031)
         _dup2(origFd, _fileno(f));
 
         // read the redirected contents

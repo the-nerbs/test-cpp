@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ProjectSchemaDefinitions xmlns="clr-namespace:Microsoft.Build.Framework.XamlTypes;assembly=Microsoft.Build.Framework">
+  <Rule Name="ReferencedPackagesE8FC9D5E-70C3-494A-8CA3-CD184766254D" PageTemplate="tool" DisplayName="Referenced Packages" SwitchPrefix="/" Order="1">
+    <Rule.Categories>
+      <Category Name="test-cpp" DisplayName="test-cpp" />
+    </Rule.Categories>
+    <Rule.DataSource>
+      <DataSource Persistence="ProjectFile" ItemType="" />
+    </Rule.DataSource>
+    <EnumProperty Name="TestCppBuildStyle" DisplayName="Build Style" Description="Determines how test-cpp is built into the project." Category="test-cpp">
+      <EnumValue Name="static" DisplayName="Static" />
+      <EnumValue Name="source" DisplayName="From Source" />
+    </EnumProperty>
+  </Rule>
+</ProjectSchemaDefinitions>

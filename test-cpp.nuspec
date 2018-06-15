@@ -15,6 +15,8 @@
     <file src=".bin\**\test-cpp.lib" target="build\native\lib" />
     <file src=".bin\**\test-cpp.pdb" target="build\native\lib" />
     <file src="test-cpp\include\*" target="build\native\include\test-cpp" />
-    <file src="tools\test-cpp.props" target="build\native" />
+    <file src="test-cpp\src\*" target="build\native\src\" />
+    <file src="tools\test-cpp.targets" target="build\native" />
+    <file src="tools\test-cpp-propertiesui.xml" target="build\native" />
   </files>
 </package>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TestCppConfig>Release</TestCppConfig>
+    <TestCppConfig Condition="$(Configuration.Contains('Debug'))">Debug</TestCppConfig>
+
+    <TestCppBuildStyle Condition="'$(TestCppBuildStyle)' == ''">Static</TestCppBuildStyle>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)\test-cpp-propertiesui.xml" />
+  </ItemGroup>
+  
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)\include\</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+
+  <ItemGroup Condition="'$(TestCppBuildStyle)' == 'source'">
+    <ClCompile Include="$(MSBuildThisFileDirectory)\src\**\*.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)\include\test-cpp\</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemGroup>
+
+  <ItemDefinitionGroup Condition="'$(TestCppBuildStyle)' == 'static'">
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies);$(MSBuildThisFileDirectory)lib\$(PlatformShortName)\$(TestCppConfig)\test-cpp.lib</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+
+  <PropertyGroup Condition="'$(TestCppBuildStyle)' != 'static' and '$(TestCppBuildStyle)' != 'source'">
+    <TestCppBuildError>test-cpp is not configured. Please select a configuration from the project properties under 'Referenced Packages > test-cpp'.</TestCppBuildError>
+  </PropertyGroup>
+
+  <Target Condition="'$(TestCppBuildError)' != ''"
+          Name="RaiseTestCppBuildError"
+          BeforeTargets="Build">
+    <Error Text="$(TestCppBuildError)" />
+  </Target>
+</Project>

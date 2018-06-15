@@ -1,5 +1,5 @@
 #include "test-cpp\include\Test.h"
-#include "test-cpp\include\Assert.h"
+#include "test-cpp\include\TestAssert.h"
 
 void sampleTest()
 {

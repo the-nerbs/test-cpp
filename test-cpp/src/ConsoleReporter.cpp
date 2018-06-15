@@ -1,4 +1,4 @@
-#include "../include/ConsoleReporter.h"
+#include "ConsoleReporter.h"
 
 #include <map>
 #include <iostream>
