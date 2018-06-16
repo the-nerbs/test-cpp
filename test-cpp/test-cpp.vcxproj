@@ -132,11 +132,13 @@
     <ClInclude Include="include\TestReporter.h" />
     <ClInclude Include="include\TestResult.h" />
     <ClInclude Include="include\TestRunner.h" />
+    <ClInclude Include="include\TestFilter.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\TestAssert.cpp" />
     <ClCompile Include="src\AssertExceptions.cpp" />
     <ClCompile Include="src\ConsoleReporter.cpp" />
+    <ClCompile Include="src\TestFilter.cpp" />
     <ClCompile Include="src\TestRunner.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

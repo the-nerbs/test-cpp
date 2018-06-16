@@ -5,6 +5,7 @@
 #include "AssertExceptions.h"
 
 #include <vector>
+#include <unordered_set>
 #include <cstdint>
 #include <cstdio>
 
@@ -21,7 +22,7 @@ namespace test
     struct FullTestInfo
     {
         const TestFunc* testFnInfo;
-        std::vector<std::string> tags;
+        std::unordered_set<std::string> tags;
     };
 
     static std::string getTempFileName()
@@ -163,7 +164,7 @@ namespace test
                     if (strcmp(pTestFn->pszName, pTag->pszTestName) == 0
                         && strcmp(pTestFn->pszFile, pTag->pszTestFile) == 0)
                     {
-                        fti.tags.emplace_back(pTag->pszTag);
+                        fti.tags.emplace(pTag->pszTag);
                     }
                 }
 
@@ -217,47 +218,50 @@ namespace test
     }
 
 
-    static void runTest(TestReporter& reporter, const TestFunc& testInfo)
+    static void runTest(TestReporter& reporter, const FullTestInfo& fullTestInfo, const TestFilter& filter)
     {
+        const TestFunc& testInfo = *fullTestInfo.testFnInfo;
+
         TestInfo info{
             testInfo.pszName,
             testInfo.pszFile,
             testInfo.count,
-            0
+            0,
+            fullTestInfo.tags
         };
 
-        if (testInfo.count == 1 && testInfo.argSize == 0)
-        {
-            info.rowNumber = 1;
-            reporter.testStarting(info);
+        uintptr_t argsAddr = reinterpret_cast<uintptr_t>(testInfo.arg);
 
-            TestResult result = runTest(testInfo.pfnTest, nullptr);
+        for (int n = 0;
+             n < testInfo.count;
+             n++, argsAddr += testInfo.argSize)
+        {
+            info.rowNumber = 1 + n;
+            reporter.testStarting(info);
+            TestResult result;
+
+            if (filter.shouldRunTest(info))
+            {
+                result = runTest(testInfo.pfnTest, (void*)argsAddr);
+            }
+            else
+            {
+                result.outcome = TestOutcome::NotRun;
+                result.message = "Test did not pass filters.";
+            }
+
             result.pszTestName = testInfo.pszName;
             result.rowNumber = info.rowNumber;
-
             reporter.testFinished(info, result);
-        }
-        else if (testInfo.argSize > 0)
-        {
-            uintptr_t argsAddr = reinterpret_cast<uintptr_t>(testInfo.arg);
-
-            for (int n = 0;
-                n < testInfo.count;
-                n++, argsAddr += testInfo.argSize)
-            {
-                info.rowNumber = 1+n;
-                reporter.testStarting(info);
-
-                TestResult result = runTest(testInfo.pfnTest, (void*)argsAddr);
-                result.pszTestName = testInfo.pszName;
-                result.rowNumber = info.rowNumber;
-
-                reporter.testFinished(info, result);
-            }
         }
     }
 
     void runAllTests(TestReporter& reporter)
+    {
+        runAllTests(reporter, NoFilter::Instance);
+    }
+
+    void runAllTests(TestReporter& reporter, const TestFilter& filter)
     {
         // discover tests
         std::vector<FullTestInfo> tests = discoverTests();
@@ -267,7 +271,7 @@ namespace test
 
         for (const auto& testInfo : tests)
         {
-            runTest(reporter, *testInfo.testFnInfo);
+            runTest(reporter, testInfo, filter);
         }
 
         reporter.runFinished();

@@ -6,7 +6,7 @@ namespace test
 {
     enum class TestOutcome
     {
-        NotRun,         // Test was not run
+        NotRun,         // Test was filtered out.
         Error,          // An error occurred trying to run the test.
         Failed,         // The test failed.
         Inconclusive,   // The test was inconclusive.
@@ -24,7 +24,10 @@ namespace test
 
 
         TestResult() :
+            pszTestName{ nullptr },
+            rowNumber{ 0 },
             outcome{ TestOutcome::NotRun },
+            message{},
             testStdout{},
             testStderr{}
         { }

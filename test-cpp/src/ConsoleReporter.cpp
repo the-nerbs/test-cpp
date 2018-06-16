@@ -34,7 +34,10 @@ namespace test
         std::cout << std::setw(14) << "Total" << _results.size();
         std::cout << "\n\n";
 
-        if (outcomes[TestOutcome::Passed] == _results.size())
+        size_t passedOrNotRun = outcomes[TestOutcome::Passed]
+                              + outcomes[TestOutcome::NotRun];
+
+        if (passedOrNotRun == _results.size())
         {
             std::cout << "Test run passed.\n\n";
         }
@@ -81,8 +84,8 @@ namespace test
                             std::cout
                                 << "  Row "
                                 << std::left << std::setw(14) << n
-                                << stringify(rowResult.outcome) << "\n"
-                                << "    " << rowResult.message
+                                << std::left << std::setw(15) << stringify(rowResult.outcome)
+                                << rowResult.message
                                 << std::endl;
                         }
                     }
